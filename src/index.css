@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #f7f6f2;
+  --color-ink: #17211f;
+  --color-dark: #123330;
+  --color-dark-2: #0d373d;
+  --color-dark-soft: #1b423d;
+  --color-accent-green: #22c55e;
+  --color-muted: #6b7280;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+a, button {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+a:active, button:active {
+  transform: scale(0.97);
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Marquee animation */
+@keyframes companies-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.companies-marquee {
+  animation: companies-marquee 30s linear infinite;
+}
