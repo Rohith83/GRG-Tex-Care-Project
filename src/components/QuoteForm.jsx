@@ -1,175 +1,105 @@
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
+import { User, Building2, Phone, Mail, Pencil, ArrowRight, Lock } from 'lucide-react';
+import CustomSelect from './CustomSelect.jsx';
+
+const SERVICES = [
+  'Machinery Erection',
+  'Breakdown Repair',
+  'Plant Shifting',
+  'Quality Solutions',
+  'Emergency Service',
+  'Technical Consultation',
+];
+
+const boxClass =
+  'w-full rounded-xl bg-white/[0.04] border border-white/20 text-cream text-[14px] px-4 py-3.5 flex items-center justify-between gap-3';
+const inputClass = 'w-full bg-transparent outline-none placeholder:text-cream/45 text-cream';
 
 export default function QuoteForm() {
   const [form, setForm] = useState({
     name: '',
-    email: '',
+    company: '',
     phone: '',
+    email: '',
     service: '',
     message: '',
   });
+  const [submitted, setSubmitted] = useState(false);
 
-  const [status, setStatus] = useState('');
+  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    setStatus('Sending...');
-
-    try {
-      await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_TEMPLATE_ID',
-        {
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          service: form.service,
-          message: form.message,
-        },
-        {
-          publicKey: 'YOUR_PUBLIC_KEY',
-        }
-      );
-
-      setStatus('Enquiry sent successfully!');
-
-      setForm({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: '',
-      });
-    } catch (error) {
-      console.error(error);
-      setStatus('Something went wrong. Please try again.');
-    }
+    if (!form.service) return;
+    setSubmitted(true);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full rounded-[28px] bg-white border border-dark/10 p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(18,51,48,0.25)]"
-    >
-
-      <h3 className="text-[24px] font-extrabold text-dark">
-        Send an Enquiry
-      </h3>
-
-      <p className="mt-2 text-[13.5px] text-muted">
-        Tell us what you need and our team will get back to you.
+    <div className="rounded-[28px] bg-dark px-6 py-8 md:px-9 md:py-10">
+      <h3 className="text-[20px] md:text-[22px] font-extrabold text-cream text-center">Request a Quote</h3>
+      <p className="mt-1.5 text-[13.5px] text-cream/55 text-center">
+        Fill the details and our team will get back to you shortly.
       </p>
 
-      <div className="mt-6 grid sm:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <label className={boxClass}>
+            <input required placeholder="Your Name *" value={form.name} onChange={update('name')} className={inputClass} />
+            <User size={17} className="text-cream/60 shrink-0" />
+          </label>
+          <label className={boxClass}>
+            <input required placeholder="Company / Textile Mill *" value={form.company} onChange={update('company')} className={inputClass} />
+            <Building2 size={17} className="text-cream/60 shrink-0" />
+          </label>
+        </div>
 
-        <input
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Your Name"
-          required
-          className="w-full rounded-xl border border-dark/15 px-4 py-3 text-[14px] outline-none focus:border-dark"
-        />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <label className={boxClass}>
+            <input required placeholder="Phone / Whatsapp *" value={form.phone} onChange={update('phone')} className={inputClass} />
+            <Phone size={17} className="text-cream/60 shrink-0" />
+          </label>
+          <label className={boxClass}>
+            <input required type="email" placeholder="Email *" value={form.email} onChange={update('email')} className={inputClass} />
+            <Mail size={17} className="text-cream/60 shrink-0" />
+          </label>
+        </div>
 
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          placeholder="Email Address"
-          required
-          className="w-full rounded-xl border border-dark/15 px-4 py-3 text-[14px] outline-none focus:border-dark"
-        />
-
-        <input
-          type="tel"
-          name="phone"
-          value={form.phone}
-          onChange={handleChange}
-          placeholder="Phone Number"
-          required
-          className="w-full rounded-xl border border-dark/15 px-4 py-3 text-[14px] outline-none focus:border-dark"
-        />
-
-        <select
-          name="service"
+        <CustomSelect
+          label="Service Required *"
+          placeholder="Select a service"
           value={form.service}
-          onChange={handleChange}
-          required
-          className="w-full rounded-xl border border-dark/15 px-4 py-3 text-[14px] outline-none focus:border-dark bg-white"
+          onChange={(val) => setForm((f) => ({ ...f, service: val }))}
+          options={SERVICES}
+        />
+
+        <label className="w-full rounded-xl bg-white/[0.04] border border-white/20 text-cream text-[14px] px-4 py-3.5 flex items-start justify-between gap-3">
+          <div className="w-full">
+            <p className="text-[12px] text-cream/55">Message *</p>
+            <textarea
+              required
+              rows={2}
+              placeholder="Tell us about your requirement..."
+              value={form.message}
+              onChange={update('message')}
+              className="w-full bg-transparent outline-none placeholder:text-cream/45 resize-none mt-0.5"
+            />
+          </div>
+          <Pencil size={16} className="text-cream/60 shrink-0 mt-0.5" />
+        </label>
+
+        <button
+          type="submit"
+          className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl bg-cream text-dark border border-cream font-semibold text-[14px] py-4 hover:bg-dark-2 hover:text-cream transition-colors"
         >
-          <option value="">Select Service</option>
-          <option value="Machinery Erection">
-            Machinery Erection
-          </option>
-          <option value="Commissioning">
-            Commissioning
-          </option>
-          <option value="Maintenance & Support">
-            Maintenance & Support
-          </option>
-          <option value="Spare Parts">
-            Spare Parts
-          </option>
-        </select>
+          {submitted ? 'Enquiry Sent' : 'Send Enquiry'}
+          <ArrowRight size={16} />
+        </button>
 
-      </div>
-
-      <textarea
-        name="message"
-        value={form.message}
-        onChange={handleChange}
-        placeholder="Your Message"
-        rows="5"
-        required
-        className="mt-4 w-full rounded-xl border border-dark/15 px-4 py-3 text-[14px] outline-none focus:border-dark resize-none"
-      />
-
-      <button
-        type="submit"
-        disabled={status === 'Sending...'}
-        className="
-          mt-5
-          w-full
-          rounded-full
-          bg-dark-2
-          text-cream
-          py-3
-          text-[14px]
-          font-semibold
-          transition-all
-          duration-300
-          hover:bg-dark
-          disabled:opacity-60
-          disabled:cursor-not-allowed
-        "
-      >
-        {status === 'Sending...' ? 'Sending...' : 'Send Enquiry'}
-      </button>
-
-      {status && (
-        <p
-          className="
-            mt-4
-            text-center
-            text-[13px]
-            text-dark/60
-          "
-        >
-          {status}
+        <p className="flex items-center justify-center gap-2 text-[12px] text-cream/45 text-center">
+          <Lock size={12} />
+          we respect your privacy. Your information is safe with us.
         </p>
-      )}
-
-    </form>
+      </form>
+    </div>
   );
 }
