@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Lock,
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 import CustomSelect from './CustomSelect.jsx';
 
@@ -37,6 +38,7 @@ export default function QuoteForm() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const update = (key) => (e) => {
     setForm((f) => ({
@@ -45,12 +47,51 @@ export default function QuoteForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.service) return;
+    if (!form.service || sending) return;
 
-    setSubmitted(true);
+    setSending(true);
+    setSubmitted(false);
+
+    try {
+      await emailjs.send(
+        'service_gs3mc1a',
+        'template_lsp1z6p',
+        {
+          name: form.name,
+          company: form.company,
+          phone: form.phone,
+          email: form.email,
+          service: form.service,
+          message: form.message,
+          time: new Date().toLocaleString(),
+        },
+        'xuIxKbSAIHCmNcCkA'
+      );
+
+      setSubmitted(true);
+
+      setForm({
+        name: '',
+        company: '',
+        phone: '',
+        email: '',
+        service: '',
+        message: '',
+      });
+
+      // Return button to normal after 2.5 seconds
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 2500);
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      alert('Unable to send enquiry. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -66,9 +107,7 @@ export default function QuoteForm() {
         md:py-10
       "
     >
-      {/* =========================
-          TITLE
-      ========================== */}
+      {/* TITLE */}
 
       <h3
         className="
@@ -94,17 +133,13 @@ export default function QuoteForm() {
         Fill the details and our team will get back to you shortly.
       </p>
 
-      {/* =========================
-          FORM
-      ========================== */}
+      {/* FORM */}
 
       <form
         onSubmit={handleSubmit}
         className="mt-7 flex flex-col gap-4"
       >
-        {/* =========================
-            NAME + COMPANY
-        ========================== */}
+        {/* NAME + COMPANY */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className={boxClass}>
@@ -142,9 +177,7 @@ export default function QuoteForm() {
           </label>
         </div>
 
-        {/* =========================
-            PHONE + EMAIL
-        ========================== */}
+        {/* PHONE + EMAIL */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className={boxClass}>
@@ -182,9 +215,7 @@ export default function QuoteForm() {
           </label>
         </div>
 
-        {/* =========================
-            SERVICE SELECT
-        ========================== */}
+        {/* SERVICE */}
 
         <CustomSelect
           label="Service Required *"
@@ -199,9 +230,7 @@ export default function QuoteForm() {
           options={SERVICES}
         />
 
-        {/* =========================
-            MESSAGE
-        ========================== */}
+        {/* MESSAGE */}
 
         <label
           className="
@@ -249,12 +278,11 @@ export default function QuoteForm() {
           />
         </label>
 
-        {/* =========================
-            SEND BUTTON
-        ========================== */}
+        {/* SEND BUTTON */}
 
         <button
           type="submit"
+          disabled={sending}
           className="
             mt-1
             w-full
@@ -270,23 +298,35 @@ export default function QuoteForm() {
             font-semibold
             text-[14px]
             py-4
+            transition-all
+            duration-300
+            ease-out
+
             hover:bg-dark-2
             hover:text-cream
-            transition-colors
-            duration-300
+            hover:shadow-[0_8px_25px_-10px_rgba(247,246,242,0.5)]
+
+            active:scale-[0.98]
+
+            disabled:cursor-not-allowed
+            disabled:opacity-70
           "
         >
-          {submitted ? 'Enquiry Sent' : 'Send Enquiry'}
+          {sending
+            ? 'Sending...'
+            : submitted
+              ? 'Enquiry Sent ✓'
+              : 'Send Enquiry'}
 
-          <ArrowRight
-            size={16}
-            strokeWidth={1.8}
-          />
+          {!sending && (
+            <ArrowRight
+              size={16}
+              strokeWidth={1.8}
+            />
+          )}
         </button>
 
-        {/* =========================
-            PRIVACY MESSAGE
-        ========================== */}
+        {/* PRIVACY MESSAGE */}
 
         <div
           className="
