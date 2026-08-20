@@ -19,7 +19,7 @@ const OUR_SERVICES = [
   'Machinery Erection',
   'Commissioning',
   'Maintenance & Support',
-  'Spare Parts',
+  'Plant Shifting',
 ];
 
 const OUR_MACHINES = [
