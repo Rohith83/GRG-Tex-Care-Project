@@ -39,6 +39,7 @@ export default function QuoteForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [serviceError, setServiceError] = useState('');
 
   const update = (key) => (e) => {
     setForm((f) => ({
@@ -50,8 +51,15 @@ export default function QuoteForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.service || sending) return;
+    if (sending) return;
 
+    // Validate service before sending
+    if (!form.service) {
+      setServiceError('Please select a requirement.');
+      return;
+    }
+
+    setServiceError('');
     setSending(true);
     setSubmitted(false);
 
@@ -82,7 +90,6 @@ export default function QuoteForm() {
         message: '',
       });
 
-      // Return button to normal after 2.5 seconds
       setTimeout(() => {
         setSubmitted(false);
       }, 2500);
@@ -217,67 +224,80 @@ export default function QuoteForm() {
 
         {/* SERVICE */}
 
-        <CustomSelect
-          label="Service Required *"
-          placeholder="Select a service"
-          value={form.service}
-          onChange={(val) =>
-            setForm((f) => ({
-              ...f,
-              service: val,
-            }))
-          }
-          options={SERVICES}
-        />
+        <div>
+          <CustomSelect
+            label="Service Required *"
+            placeholder="Select a service"
+            value={form.service}
+            onChange={(val) => {
+              setForm((f) => ({
+                ...f,
+                service: val,
+              }));
 
-        {/* MESSAGE */}
+              // Clear error when user selects a service
+              setServiceError('');
+            }}
+            options={SERVICES}
+          />
 
-       {/* MESSAGE */}
+          {serviceError && (
+            <p className="mt-1.5 px-1 text-[12px] text-red-300">
+              {serviceError}
+            </p>
+          )}
+        </div>
 
-<label
-  className="
-    w-full
-    rounded-xl
-    bg-white/[0.04]
-    border
-    border-white/20
-    text-cream
-    text-[14px]
-    px-4
-    py-3.5
-    flex
-    items-start
-    justify-between
-    gap-3
-  "
->
-  <div className="w-full min-w-0">
-    <p className="text-[12px] text-cream/55">
-      Message <span className="text-cream/40">(Optional)</span>
-    </p>
+        {/* MESSAGE - OPTIONAL */}
 
-    <textarea
-      rows={2}
-      placeholder="Tell us about your requirement..."
-      value={form.message}
-      onChange={update('message')}
-      className="
-        w-full
-        bg-transparent
-        outline-none
-        placeholder:text-cream/45
-        resize-none
-        mt-0.5
-      "
-    />
-  </div>
+        <label
+          className="
+            w-full
+            rounded-xl
+            bg-white/[0.04]
+            border
+            border-white/20
+            text-cream
+            text-[14px]
+            px-4
+            py-3.5
+            flex
+            items-start
+            justify-between
+            gap-3
+          "
+        >
+          <div className="w-full min-w-0">
+            <p className="text-[12px] text-cream/55">
+              Message{' '}
+              <span className="text-cream/40">
+                (Optional)
+              </span>
+            </p>
 
-  <Pencil
-    size={16}
-    strokeWidth={1.8}
-    className="text-cream/60 shrink-0 mt-0.5"
-  />
-</label>
+            <textarea
+              rows={2}
+              placeholder="Tell us about your requirement..."
+              value={form.message}
+              onChange={update('message')}
+              className="
+                w-full
+                bg-transparent
+                outline-none
+                placeholder:text-cream/45
+                resize-none
+                mt-0.5
+              "
+            />
+          </div>
+
+          <Pencil
+            size={16}
+            strokeWidth={1.8}
+            className="text-cream/60 shrink-0 mt-0.5"
+          />
+        </label>
+
         {/* SEND BUTTON */}
 
         <button
