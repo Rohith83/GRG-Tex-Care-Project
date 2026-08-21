@@ -40,6 +40,7 @@ export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [serviceError, setServiceError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
 
   const update = (key) => (e) => {
     setForm((f) => ({
@@ -48,18 +49,40 @@ export default function QuoteForm() {
     }));
   };
 
+  const handlePhoneChange = (e) => {
+    // Allow numbers only and maximum 10 digits
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+
+    setForm((f) => ({
+      ...f,
+      phone: value,
+    }));
+
+    // Clear phone error while typing
+    if (phoneError) {
+      setPhoneError('');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (sending) return;
 
-    // Validate service before sending
+    // Validate service
     if (!form.service) {
       setServiceError('Please select a requirement.');
       return;
     }
 
+    // Validate phone number
+    if (form.phone.length !== 10) {
+      setPhoneError('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
     setServiceError('');
+    setPhoneError('');
     setSending(true);
     setSubmitted(false);
 
@@ -187,22 +210,32 @@ export default function QuoteForm() {
         {/* PHONE + EMAIL */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <label className={boxClass}>
-            <input
-              required
-              type="tel"
-              placeholder="Phone / Whatsapp *"
-              value={form.phone}
-              onChange={update('phone')}
-              className={inputClass}
-            />
+          <div className="w-full">
+            <label className={boxClass}>
+              <input
+                required
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                placeholder="Phone / Whatsapp *"
+                value={form.phone}
+                onChange={handlePhoneChange}
+                className={inputClass}
+              />
 
-            <Phone
-              size={17}
-              strokeWidth={1.8}
-              className="text-cream/60 shrink-0"
-            />
-          </label>
+              <Phone
+                size={17}
+                strokeWidth={1.8}
+                className="text-cream/60 shrink-0"
+              />
+            </label>
+
+            {phoneError && (
+              <p className="mt-1.5 px-1 text-[12px] text-red-300">
+                {phoneError}
+              </p>
+            )}
+          </div>
 
           <label className={boxClass}>
             <input
@@ -235,7 +268,6 @@ export default function QuoteForm() {
                 service: val,
               }));
 
-              // Clear error when user selects a service
               setServiceError('');
             }}
             options={SERVICES}
