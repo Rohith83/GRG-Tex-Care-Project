@@ -232,52 +232,52 @@ export default function QuoteForm() {
 
         {/* MESSAGE */}
 
-        <label
-          className="
-            w-full
-            rounded-xl
-            bg-white/[0.04]
-            border
-            border-white/20
-            text-cream
-            text-[14px]
-            px-4
-            py-3.5
-            flex
-            items-start
-            justify-between
-            gap-3
-          "
-        >
-          <div className="w-full min-w-0">
-            <p className="text-[12px] text-cream/55">
-              Message *
-            </p>
+       {/* MESSAGE */}
 
-            <textarea
-              required
-              rows={2}
-              placeholder="Tell us about your requirement..."
-              value={form.message}
-              onChange={update('message')}
-              className="
-                w-full
-                bg-transparent
-                outline-none
-                placeholder:text-cream/45
-                resize-none
-                mt-0.5
-              "
-            />
-          </div>
+<label
+  className="
+    w-full
+    rounded-xl
+    bg-white/[0.04]
+    border
+    border-white/20
+    text-cream
+    text-[14px]
+    px-4
+    py-3.5
+    flex
+    items-start
+    justify-between
+    gap-3
+  "
+>
+  <div className="w-full min-w-0">
+    <p className="text-[12px] text-cream/55">
+      Message <span className="text-cream/40">(Optional)</span>
+    </p>
 
-          <Pencil
-            size={16}
-            strokeWidth={1.8}
-            className="text-cream/60 shrink-0 mt-0.5"
-          />
-        </label>
+    <textarea
+      rows={2}
+      placeholder="Tell us about your requirement..."
+      value={form.message}
+      onChange={update('message')}
+      className="
+        w-full
+        bg-transparent
+        outline-none
+        placeholder:text-cream/45
+        resize-none
+        mt-0.5
+      "
+    />
+  </div>
 
+  <Pencil
+    size={16}
+    strokeWidth={1.8}
+    className="text-cream/60 shrink-0 mt-0.5"
+  />
+</label>
         {/* SEND BUTTON */}
 
         <button
