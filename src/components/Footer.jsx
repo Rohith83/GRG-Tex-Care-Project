@@ -7,19 +7,20 @@ import {
 } from 'lucide-react';
 
 import Logo from './Logo.jsx';
+import { scrollToSection } from '../utils/scrollToSection.js';
 
 const QUICK_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'About us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact us', href: '#contact' },
+  { label: 'Home', id: 'home' },
+  { label: 'About us', id: 'about' },
+  { label: 'Services', id: 'services' },
+  { label: 'Contact us', id: 'contact' },
 ];
 
 const OUR_SERVICES = [
   'Machinery Erection',
   'Commissioning',
   'Maintenance & Support',
-  'Plant Shifting',
+  'Spare Parts',
 ];
 
 const OUR_MACHINES = [
@@ -31,8 +32,18 @@ const OUR_MACHINES = [
 
 export default function Footer() {
   return (
-    <footer className="bg-dark px-5 md:px-8 pt-14 pb-6">
-      <div className="max-w-[1360px] mx-auto">
+    <footer
+      className="
+        bg-dark
+        px-4
+        pt-12
+        pb-6
+        sm:px-5
+        sm:pt-14
+        md:px-8
+      "
+    >
+      <div className="mx-auto w-full max-w-[1360px]">
 
         {/* =====================================
             MAIN FOOTER CONTENT
@@ -41,49 +52,70 @@ export default function Footer() {
           className="
             grid
             grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]
-            gap-x-10
             gap-y-10
+
+            sm:grid-cols-2
+            sm:gap-x-10
+            sm:gap-y-12
+
+            lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]
+            lg:gap-x-10
+            lg:gap-y-10
           "
         >
 
           {/* =====================================
               BRAND
           ====================================== */}
-          <div>
-            <a
-              href="#home"
-              className="inline-flex items-center gap-2.5"
+          <div className="min-w-0">
+
+            <button
+              type="button"
+              onClick={() => scrollToSection('home')}
+              className="
+                inline-flex
+                items-center
+                gap-2.5
+                text-left
+              "
             >
               <Logo light size={26} />
 
               <span className="flex flex-col leading-none">
-                <span className="font-extrabold text-[18px] text-cream">
+                <span
+                  className="
+                    font-extrabold
+                    text-[17px]
+                    text-cream
+                    sm:text-[18px]
+                  "
+                >
                   GRG Tex Care
                 </span>
 
                 <span
                   className="
-                    text-[11px]
+                    mt-1
+                    text-[10px]
                     font-medium
                     tracking-[0.08em]
                     text-cream/50
-                    mt-1
+                    sm:text-[11px]
                   "
                 >
                   Think best, Do best
                 </span>
               </span>
-            </a>
+            </button>
 
             <p
               className="
                 mt-4
-                max-w-[270px]
+                max-w-[300px]
                 text-[12px]
                 leading-relaxed
                 text-cream/55
+                sm:max-w-[270px]
               "
             >
               Textile machinery erection and service you can trust.
@@ -101,6 +133,7 @@ export default function Footer() {
                   flex
                   h-9
                   w-9
+                  shrink-0
                   items-center
                   justify-center
                   rounded-full
@@ -125,15 +158,74 @@ export default function Footer() {
                 </svg>
               </a>
 
+              {/* INSTAGRAM */}
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="
+                  flex
+                  h-9
+                  w-9
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-white/15
+                  text-cream/70
+                  transition-all
+                  duration-300
+                  hover:border-white
+                  hover:bg-white
+                  hover:text-dark
+                "
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="3"
+                    y="3"
+                    width="18"
+                    height="18"
+                    rx="5"
+                  />
+
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                  />
+
+                  <circle
+                    cx="17.5"
+                    cy="6.5"
+                    r="1"
+                    fill="currentColor"
+                    stroke="none"
+                  />
+                </svg>
+              </a>
+
               {/* WHATSAPP */}
               <a
                 href="https://wa.me/917305474673"
                 target="_blank"
+                rel="noreferrer"
                 aria-label="WhatsApp"
                 className="
                   flex
                   h-9
                   w-9
+                  shrink-0
                   items-center
                   justify-center
                   rounded-full
@@ -158,6 +250,7 @@ export default function Footer() {
                   flex
                   h-9
                   w-9
+                  shrink-0
                   items-center
                   justify-center
                   rounded-full
@@ -173,7 +266,6 @@ export default function Footer() {
               >
                 <Mail size={15} />
               </a>
-
             </div>
           </div>
 
@@ -181,7 +273,8 @@ export default function Footer() {
           {/* =====================================
               QUICK LINKS
           ====================================== */}
-          <div>
+          <div className="min-w-0">
+
             <p
               className="
                 mb-5
@@ -196,17 +289,20 @@ export default function Footer() {
             <ul className="flex flex-col gap-3.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection(link.id)}
                     className="
+                      text-left
                       text-[13px]
                       text-cream/50
                       transition-colors
+                      duration-300
                       hover:text-cream
                     "
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -216,7 +312,8 @@ export default function Footer() {
           {/* =====================================
               OUR SERVICES
           ====================================== */}
-          <div>
+          <div className="min-w-0">
+
             <p
               className="
                 mb-5
@@ -231,17 +328,20 @@ export default function Footer() {
             <ul className="flex flex-col gap-3.5">
               {OUR_SERVICES.map((service) => (
                 <li key={service}>
-                  <a
-                    href="#services"
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('services')}
                     className="
+                      text-left
                       text-[13px]
                       text-cream/50
                       transition-colors
+                      duration-300
                       hover:text-cream
                     "
                   >
                     {service}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -251,7 +351,8 @@ export default function Footer() {
           {/* =====================================
               OUR MACHINES
           ====================================== */}
-          <div>
+          <div className="min-w-0">
+
             <p
               className="
                 mb-5
@@ -266,17 +367,20 @@ export default function Footer() {
             <ul className="flex flex-col gap-3.5">
               {OUR_MACHINES.map((machine) => (
                 <li key={machine}>
-                  <a
-                    href="#machinery"
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('machinery')}
                     className="
+                      text-left
                       text-[13px]
                       text-cream/50
                       transition-colors
+                      duration-300
                       hover:text-cream
                     "
                   >
                     {machine}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -286,7 +390,8 @@ export default function Footer() {
           {/* =====================================
               CONTACT
           ====================================== */}
-          <div>
+          <div className="min-w-0">
+
             <p
               className="
                 mb-5
@@ -302,30 +407,43 @@ export default function Footer() {
 
               {/* PHONE */}
               <li className="flex items-start gap-2.5">
+
                 <Phone
                   size={14}
-                  className="mt-0.5 shrink-0 text-cream/60"
+                  className="
+                    mt-0.5
+                    shrink-0
+                    text-cream/60
+                  "
                 />
 
                 <a
                   href="tel:+917305474673"
                   className="
+                    whitespace-nowrap
                     text-[13px]
                     text-cream/50
                     transition-colors
+                    duration-300
                     hover:text-cream
                   "
                 >
                   +91 73054 74673
                 </a>
+
               </li>
 
 
               {/* EMAIL */}
               <li className="flex items-start gap-2.5">
+
                 <Mail
                   size={14}
-                  className="mt-0.5 shrink-0 text-cream/60"
+                  className="
+                    mt-0.5
+                    shrink-0
+                    text-cream/60
+                  "
                 />
 
                 <a
@@ -333,21 +451,29 @@ export default function Footer() {
                   className="
                     break-all
                     text-[13px]
+                    leading-relaxed
                     text-cream/50
                     transition-colors
+                    duration-300
                     hover:text-cream
                   "
                 >
                   grgtexcare@gmail.com
                 </a>
+
               </li>
 
 
               {/* LOCATION */}
               <li className="flex items-start gap-2.5">
+
                 <MapPin
                   size={14}
-                  className="mt-0.5 shrink-0 text-cream/60"
+                  className="
+                    mt-0.5
+                    shrink-0
+                    text-cream/60
+                  "
                 />
 
                 <span
@@ -361,6 +487,7 @@ export default function Footer() {
                   <br />
                   Tamil Nadu, India
                 </span>
+
               </li>
 
             </ul>
@@ -372,7 +499,7 @@ export default function Footer() {
         {/* =====================================
             DIVIDER
         ====================================== */}
-        <div className="mt-12 border-t border-white/10" />
+        <div className="mt-10 border-t border-white/10 sm:mt-12" />
 
 
         {/* =====================================
@@ -389,32 +516,38 @@ export default function Footer() {
             sm:flex-row
           "
         >
+
           <p
             className="
               text-center
-              text-[11.5px]
+              text-[11px]
               text-cream/40
               sm:text-left
+              sm:text-[11.5px]
             "
           >
             © 2026 GRG Tex Care. All Rights reserved.
           </p>
 
-          <a
-            href="#home"
+          <button
+            type="button"
+            onClick={() => scrollToSection('home')}
             className="
               flex
               items-center
               gap-1.5
-              text-[11.5px]
+              text-[11px]
               text-cream/40
               transition-colors
+              duration-300
               hover:text-cream
+              sm:text-[11.5px]
             "
           >
             Back to top
             <ArrowUp size={13} />
-          </a>
+          </button>
+
         </div>
 
       </div>

@@ -23,7 +23,6 @@ import carding from '../assets/machines/carding.png';
 import drawFrame from '../assets/machines/draw-frame.png';
 import lapFormer from '../assets/machines/lap-former.png';
 
-
 const MACHINES = [
   {
     name: 'Ring Frame',
@@ -67,21 +66,19 @@ const MACHINES = [
   },
 ];
 
-
 const VISIBLE_COUNT = 5;
-
+const HEADER_HEIGHT = 64;
 
 const Machinery = forwardRef(function Machinery(_, ref) {
   const [expanded, setExpanded] = useState(false);
 
   const sectionRef = useRef(null);
 
-
   /*
    * Hero → Explore Services
    *
-   * Expands the machinery section and
-   * smoothly scrolls to it.
+   * Expand the machinery section first,
+   * then scroll to the correct position.
    */
   useImperativeHandle(ref, () => ({
     expandAndScroll() {
@@ -89,49 +86,70 @@ const Machinery = forwardRef(function Machinery(_, ref) {
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          sectionRef.current?.scrollIntoView({
+          const target = sectionRef.current;
+
+          if (!target) return;
+
+          const targetPosition =
+            target.getBoundingClientRect().top +
+            window.scrollY -
+            HEADER_HEIGHT;
+
+          window.scrollTo({
+            top: Math.max(0, targetPosition),
             behavior: 'smooth',
-            block: 'start',
           });
+
+          window.history.pushState(
+            null,
+            '',
+            '#machinery'
+          );
         });
       });
     },
   }));
 
-
   const handleToggle = () => {
     setExpanded((current) => !current);
   };
-
 
   return (
     <section
       ref={sectionRef}
       id="machinery"
       className="
-        py-14
-        px-5
+        scroll-mt-[64px]
+        py-10
+        sm:py-12
+        md:py-14
+        px-4
+        sm:px-5
         md:px-8
-        scroll-mt-20
       "
     >
-
       <div className="max-w-[1615px] mx-auto">
-
 
         {/* =========================
             HEADING
         ========================== */}
 
-        <div className="text-center max-w-[560px] mx-auto">
-
+        <div
+          className="
+            text-center
+            w-full
+            max-w-[560px]
+            mx-auto
+          "
+        >
           <h2
             className="
               text-[26px]
+              sm:text-[28px]
               md:text-[32px]
               font-extrabold
               text-dark
-              leading-tight
+              leading-[1.15]
             "
           >
             Textile Machinery
@@ -141,8 +159,12 @@ const Machinery = forwardRef(function Machinery(_, ref) {
 
           <p
             className="
-              mt-5
-              text-[14px]
+              mt-4
+              sm:mt-5
+              px-2
+              sm:px-0
+              text-[13.5px]
+              sm:text-[14px]
               md:text-[15px]
               text-muted
               leading-relaxed
@@ -151,16 +173,21 @@ const Machinery = forwardRef(function Machinery(_, ref) {
             Specialized erection and service for leading textile
             machinery brands.
           </p>
-
         </div>
-
 
         {/* =========================
             MACHINERY GRID
         ========================== */}
 
-        <div className="mt-10 flex justify-center">
-
+        <div
+          className="
+            mt-8
+            sm:mt-10
+            flex
+            justify-center
+            w-full
+          "
+        >
           <div
             className="
               grid
@@ -172,19 +199,19 @@ const Machinery = forwardRef(function Machinery(_, ref) {
               md:grid-cols-4
               lg:grid-cols-5
 
-              gap-4
-              sm:gap-5
+              gap-3
+              sm:gap-4
+              lg:gap-5
             "
           >
-
             {MACHINES.map((machine, index) => {
-
               const isExtra = index >= VISIBLE_COUNT;
 
               return (
                 <div
                   key={machine.name}
                   className={`
+                    min-w-0
                     overflow-hidden
 
                     transition-all
@@ -212,20 +239,15 @@ const Machinery = forwardRef(function Machinery(_, ref) {
                     }
                   `}
                 >
-
                   <MachineryCard
                     name={machine.name}
                     image={machine.image}
                   />
-
                 </div>
               );
             })}
-
           </div>
-
         </div>
-
 
         {/* =========================
             EXPLORE / SHOW LESS
@@ -233,12 +255,12 @@ const Machinery = forwardRef(function Machinery(_, ref) {
 
         <div
           className="
-            mt-10
+            mt-8
+            sm:mt-10
             flex
             justify-center
           "
         >
-
           <button
             type="button"
             onClick={handleToggle}
@@ -255,11 +277,14 @@ const Machinery = forwardRef(function Machinery(_, ref) {
               border
               border-dark-2
 
-              text-[14px]
+              text-[13px]
+              sm:text-[14px]
               font-semibold
 
-              px-6
-              py-3
+              px-5
+              sm:px-6
+              py-2.5
+              sm:py-3
 
               cursor-pointer
 
@@ -272,7 +297,6 @@ const Machinery = forwardRef(function Machinery(_, ref) {
               active:scale-[0.97]
             "
           >
-
             <span>
               {expanded ? 'Show Less' : 'Explore More'}
             </span>
@@ -292,16 +316,12 @@ const Machinery = forwardRef(function Machinery(_, ref) {
                 <ChevronDown size={16} />
               )}
             </span>
-
           </button>
-
         </div>
 
       </div>
-
     </section>
   );
 });
-
 
 export default Machinery;

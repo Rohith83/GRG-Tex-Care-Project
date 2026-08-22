@@ -1,22 +1,41 @@
 import { useState } from 'react';
-import Logo from './Logo.jsx';
+import { Cog } from 'lucide-react';
+import { scrollToSection } from '../utils/scrollToSection.js';
 
 const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'About us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact us', href: '#contact' },
+  { label: 'Home', id: 'home' },
+  { label: 'About us', id: 'about' },
+  { label: 'Services', id: 'services' },
+  { label: 'Contact us', id: 'contact' },
 ];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
 
-  const closeMenu = () => {
-    setOpen(false);
+  const handleNavClick = (id) => {
+    /*
+     * Desktop:
+     * scroll immediately.
+     *
+     * Mobile:
+     * close the menu first, wait until the layout updates,
+     * then calculate the section position.
+     */
+    if (open) {
+      setOpen(false);
+
+      setTimeout(() => {
+        scrollToSection(id);
+      }, 320);
+
+      return;
+    }
+
+    scrollToSection(id);
   };
 
   const toggleMenu = () => {
-    setOpen((value) => !value);
+    setOpen((current) => !current);
   };
 
   return (
@@ -31,11 +50,16 @@ export default function Header() {
         border-black/5
       "
     >
+      {/* =====================================
+          HEADER BAR
+      ====================================== */}
+
       <div
         className="
           max-w-[1360px]
           mx-auto
-          px-5
+          px-4
+          sm:px-5
           md:px-8
           h-[64px]
           flex
@@ -46,17 +70,39 @@ export default function Header() {
         {/* =====================================
             LOGO
         ====================================== */}
-        <a
-          href="#home"
-          onClick={closeMenu}
+
+        <button
+          type="button"
+          onClick={() => handleNavClick('home')}
+          aria-label="Go to home"
           className="
             flex
             items-center
             gap-2.5
             shrink-0
+            text-left
+            cursor-pointer
           "
         >
-          <Logo />
+          <div
+            className="
+              w-9
+              h-9
+              rounded-xl
+              bg-dark
+              text-cream
+              flex
+              items-center
+              justify-center
+              shrink-0
+            "
+          >
+            <Cog
+              size={21}
+              strokeWidth={2}
+              className="animate-[spin_8s_linear_infinite]"
+            />
+          </div>
 
           <span className="flex flex-col leading-none">
             <span
@@ -82,11 +128,12 @@ export default function Header() {
               Think best, Do best
             </span>
           </span>
-        </a>
+        </button>
 
         {/* =====================================
             DESKTOP NAVIGATION
         ====================================== */}
+
         <nav
           className="
             hidden
@@ -97,15 +144,18 @@ export default function Header() {
             font-medium
             text-ink/80
           "
+          aria-label="Main navigation"
         >
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
+            <button
+              key={link.id}
+              type="button"
+              onClick={() => handleNavClick(link.id)}
               className="
                 group
                 relative
                 py-1
+                cursor-pointer
                 hover:text-dark
                 transition-colors
                 duration-300
@@ -113,7 +163,6 @@ export default function Header() {
             >
               {link.label}
 
-              {/* Animated underline */}
               <span
                 className="
                   absolute
@@ -130,15 +179,17 @@ export default function Header() {
                   group-hover:w-full
                 "
               />
-            </a>
+            </button>
           ))}
         </nav>
 
         {/* =====================================
             DESKTOP QUOTE BUTTON
         ====================================== */}
-        <a
-          href="#contact"
+
+        <button
+          type="button"
+          onClick={() => handleNavClick('contact')}
           className="
             hidden
             md:inline-flex
@@ -153,6 +204,7 @@ export default function Header() {
             font-semibold
             px-5
             py-2.5
+            cursor-pointer
             transition-all
             duration-300
             ease-out
@@ -163,11 +215,12 @@ export default function Header() {
           "
         >
           Get a Quote
-        </a>
+        </button>
 
         {/* =====================================
             MOBILE MENU BUTTON
         ====================================== */}
+
         <button
           type="button"
           onClick={toggleMenu}
@@ -182,23 +235,21 @@ export default function Header() {
             shrink-0
             rounded-full
             flex
-            flex-col
             items-center
             justify-center
-            gap-[5px]
             text-dark
+            cursor-pointer
             transition-all
             duration-300
-            ease-out
             hover:bg-dark/10
-            hover:scale-105
             active:scale-90
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-dark/30
           "
         >
-          {/* Top line */}
+          {/* TOP */}
+
           <span
             className={`
               absolute
@@ -217,7 +268,8 @@ export default function Header() {
             `}
           />
 
-          {/* Middle line */}
+          {/* MIDDLE */}
+
           <span
             className={`
               absolute
@@ -236,7 +288,8 @@ export default function Header() {
             `}
           />
 
-          {/* Bottom line */}
+          {/* BOTTOM */}
+
           <span
             className={`
               absolute
@@ -260,6 +313,7 @@ export default function Header() {
       {/* =====================================
           MOBILE NAVIGATION
       ====================================== */}
+
       <div
         id="mobile-navigation"
         className={`
@@ -269,7 +323,7 @@ export default function Header() {
           border-black/5
           bg-cream
           transition-all
-          duration-400
+          duration-300
           ease-[cubic-bezier(0.22,1,0.36,1)]
           ${
             open
@@ -278,13 +332,22 @@ export default function Header() {
           }
         `}
       >
-        <nav className="px-5 pt-3 pb-5">
+        <nav
+          className="
+            px-4
+            sm:px-5
+            pt-3
+            pb-5
+          "
+          aria-label="Mobile navigation"
+        >
           <div className="flex flex-col gap-1">
+
             {NAV_LINKS.map((link, index) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={closeMenu}
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => handleNavClick(link.id)}
                 style={{
                   transitionDelay: open
                     ? `${index * 40}ms`
@@ -296,18 +359,21 @@ export default function Header() {
                   flex
                   items-center
                   justify-between
+                  w-full
+                  min-h-[46px]
                   py-3
                   px-3
                   rounded-lg
+                  text-left
                   text-[15px]
                   font-medium
                   text-ink/80
+                  cursor-pointer
                   transition-all
                   duration-300
                   ease-out
                   hover:bg-dark/5
                   hover:text-dark
-                  hover:pl-5
                   ${
                     open
                       ? 'translate-y-0 opacity-100'
@@ -315,15 +381,7 @@ export default function Header() {
                   }
                 `}
               >
-                <span
-                  className="
-                    transition-transform
-                    duration-300
-                    group-hover:scale-[1.02]
-                  "
-                >
-                  {link.label}
-                </span>
+                <span>{link.label}</span>
 
                 <span
                   className="
@@ -338,22 +396,19 @@ export default function Header() {
                 >
                   →
                 </span>
-              </a>
+              </button>
             ))}
 
-            {/* Mobile Quote Button */}
-            <a
-              href="#contact"
-              onClick={closeMenu}
-              style={{
-                transitionDelay: open
-                  ? `${NAV_LINKS.length * 40}ms`
-                  : '0ms',
-              }}
+            {/* MOBILE QUOTE */}
+
+            <button
+              type="button"
+              onClick={() => handleNavClick('contact')}
               className={`
                 flex
                 items-center
                 justify-center
+                w-full
                 rounded-full
                 bg-dark-2
                 text-cream
@@ -364,12 +419,12 @@ export default function Header() {
                 px-5
                 py-2.5
                 mt-2
+                cursor-pointer
                 transition-all
                 duration-300
                 ease-out
                 hover:bg-white
                 hover:text-dark-2
-                hover:scale-[1.02]
                 active:scale-[0.98]
                 ${
                   open
@@ -379,7 +434,8 @@ export default function Header() {
               `}
             >
               Get a Quote
-            </a>
+            </button>
+
           </div>
         </nav>
       </div>

@@ -35,20 +35,27 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-14 px-5 md:px-8"
+      className="
+        w-full
+        py-12
+        sm:py-14
+        px-4
+        sm:px-5
+        md:px-8
+      "
     >
       <div
         className="
           max-w-[1200px]
           mx-auto
           grid
+          grid-cols-1
           lg:grid-cols-[0.9fr_1.1fr]
-          gap-8
+          gap-10
           lg:gap-12
           items-start
         "
       >
-
         {/* =========================
             LEFT SIDE
         ========================== */}
@@ -60,10 +67,9 @@ export default function Contact() {
             mx-auto
           "
         >
-
           {/* Heading area */}
-          <div className="text-center lg:text-left">
 
+          <div className="text-center lg:text-left">
             <span
               className="
                 inline-flex
@@ -72,11 +78,13 @@ export default function Contact() {
                 rounded-full
                 border
                 border-dark/20
-                text-[12px]
+                text-[11px]
+                sm:text-[12px]
                 font-semibold
                 tracking-wide
                 text-dark
-                px-4
+                px-3.5
+                sm:px-4
                 py-1.5
               "
             >
@@ -85,12 +93,14 @@ export default function Contact() {
 
             <h2
               className="
-                mt-5
-                text-[28px]
+                mt-4
+                sm:mt-5
+                text-[26px]
+                sm:text-[28px]
                 md:text-[34px]
                 font-extrabold
                 text-dark
-                leading-tight
+                leading-[1.15]
               "
             >
               Let&apos;s Keep Your
@@ -101,7 +111,8 @@ export default function Contact() {
             <p
               className="
                 mt-4
-                text-[14.5px]
+                text-[14px]
+                sm:text-[14.5px]
                 text-muted
                 leading-relaxed
                 max-w-[420px]
@@ -115,7 +126,8 @@ export default function Contact() {
 
             <div
               className="
-                mt-6
+                mt-5
+                sm:mt-6
                 w-10
                 h-[2px]
                 bg-dark/30
@@ -123,35 +135,33 @@ export default function Contact() {
                 lg:mx-0
               "
             />
-
           </div>
-
 
           {/* =========================
               CONTACT DETAILS
           ========================== */}
 
-          <div className="mt-6 w-full">
-
+          <div className="mt-6 sm:mt-7 w-full">
             {DETAILS.map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
                 className="
                   flex
                   items-center
-                  gap-4
-                  w-fit
-                  mx-auto
-                  lg:mx-0
-                  py-2
+                  gap-3
+                  sm:gap-4
+                  w-full
+                  py-2.5
                 "
               >
-
                 {/* Icon */}
+
                 <span
                   className="
-                    w-11
-                    h-11
+                    w-10
+                    h-10
+                    sm:w-11
+                    sm:h-11
                     shrink-0
                     rounded-xl
                     border
@@ -163,18 +173,19 @@ export default function Contact() {
                   "
                 >
                   <Icon
-                    size={18}
+                    size={17}
+                    className="sm:w-[18px] sm:h-[18px]"
                     strokeWidth={1.8}
                   />
                 </span>
 
-
                 {/* Text */}
-                <div className="w-[260px] text-left">
 
+                <div className="min-w-0 flex-1 text-left">
                   <p
                     className="
-                      text-[13px]
+                      text-[12px]
+                      sm:text-[13px]
                       font-medium
                       text-dark/70
                       leading-none
@@ -186,22 +197,20 @@ export default function Contact() {
                   <p
                     className="
                       mt-1
-                      text-[15px]
+                      text-[14px]
+                      sm:text-[15px]
                       font-semibold
                       text-ink
                       leading-snug
+                      break-words
                     "
                   >
                     {value}
                   </p>
-
                 </div>
-
               </div>
             ))}
-
           </div>
-
 
           {/* =========================
               15+ YEARS CARD
@@ -209,24 +218,29 @@ export default function Contact() {
 
           <div
             className="
-              mt-6
+              mt-5
+              sm:mt-6
               w-full
               rounded-2xl
               bg-dark
-              px-5
+              px-4
               sm:px-6
-              py-5
+              py-4
+              sm:py-5
               flex
               items-center
-              gap-4
+              gap-3
+              sm:gap-4
             "
           >
-
             {/* Award */}
+
             <span
               className="
-                w-11
-                h-11
+                w-10
+                h-10
+                sm:w-11
+                sm:h-11
                 shrink-0
                 rounded-full
                 bg-white/10
@@ -237,18 +251,19 @@ export default function Contact() {
               "
             >
               <Award
-                size={20}
+                size={18}
+                className="sm:w-5 sm:h-5"
                 strokeWidth={1.8}
               />
             </span>
 
-
             {/* Text */}
-            <div className="min-w-0 flex-1 text-left">
 
+            <div className="min-w-0 flex-1 text-left">
               <p
                 className="
-                  text-[17px]
+                  text-[16px]
+                  sm:text-[17px]
                   font-extrabold
                   text-cream
                   leading-none
@@ -260,7 +275,8 @@ export default function Contact() {
               <p
                 className="
                   mt-1
-                  text-[12.5px]
+                  text-[11.5px]
+                  sm:text-[12.5px]
                   text-cream/55
                   leading-relaxed
                 "
@@ -268,22 +284,17 @@ export default function Contact() {
                 of Trusted Service in Textile Machinery
                 Erection &amp; Service
               </p>
-
             </div>
-
           </div>
-
         </div>
-
 
         {/* =========================
             RIGHT — QUOTE FORM
         ========================== */}
 
-        <div className="w-full">
+        <div className="w-full min-w-0">
           <QuoteForm />
         </div>
-
       </div>
     </section>
   );
